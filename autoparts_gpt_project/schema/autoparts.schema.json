@@ -18,6 +18,11 @@
       "type": "array",
       "items": { "type": "string" },
       "minItems": 1
+    },
+    "Источники": {
+      "type": "array",
+      "items": { "type": "string", "format": "uri" },
+      "minItems": 1
     }
   },
   "additionalProperties": true

@@ -185,6 +185,27 @@ def write_excel(path: Path, rows: List[Dict[str, Any]]) -> None:
     df.to_excel(path, index=False)
 
 
+def write_markdown_table(path: Path, rows: List[Dict[str, Any]]) -> None:
+    headers = ["Артикул", "Наименование товара", "Описание товара", "Марка", "Модель"]
+    lines: List[str] = []
+    lines.append("| " + " | ".join(headers) + " |")
+    lines.append("| " + " | ".join(["---"] * len(headers)) + " |")
+    for row in rows:
+        models = row.get("Модель")
+        models_str = ", ".join(models) if isinstance(models, list) else str(models)
+        cells = [
+            str(row.get("Артикул", "")),
+            str(row.get("Наименование товара", "")),
+            str(row.get("Описание товара", "")),
+            str(row.get("Марка", "")),
+            models_str,
+        ]
+        # escape pipe characters to not break Markdown table
+        cells = [c.replace("|", "\|") for c in cells]
+        lines.append("| " + " | ".join(cells) + " |")
+    path.write_text("\n".join(lines), encoding="utf-8")
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Autoparts GPT runner")
     parser.add_argument(
@@ -264,7 +285,10 @@ def main() -> None:
 
     write_jsonl(out_dir / "results.jsonl", results)
     write_excel(out_dir / "results.xlsx", results)
-    print(f"Done. Wrote: {out_dir / 'results.jsonl'} and {out_dir / 'results.xlsx'}")
+    write_markdown_table(out_dir / "results.md", results)
+    print(
+        f"Done. Wrote: {out_dir / 'results.jsonl'}, {out_dir / 'results.xlsx'}, {out_dir / 'results.md'}"
+    )
 
 
 if __name__ == "__main__":
