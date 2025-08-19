@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AutopartResult",
+  "type": "object",
+  "required": [
+    "Артикул",
+    "Наименование товара",
+    "Описание товара",
+    "Марка",
+    "Модель"
+  ],
+  "properties": {
+    "Артикул": { "type": "string", "minLength": 1 },
+    "Наименование товара": { "type": "string", "minLength": 1 },
+    "Описание товара": { "type": "string" },
+    "Марка": { "type": "string" },
+    "Модель": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    }
+  },
+  "additionalProperties": true
+}
